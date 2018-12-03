@@ -74,7 +74,7 @@ export const handler = async event => {
     }
     return response;
   } catch (e) {
-    statusCode.statusCode = 400;
+    response.statusCode = 400;
     response.body = JSON.stringify({
       message: e.message
     });
