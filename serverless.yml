@@ -1,0 +1,42 @@
+service: eubfr-geojson
+
+plugins:
+  - serverless-webpack
+  - serverless-offline #serverless-offline needs to be last in the list
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: yarn
+  eubfrEnvironment: ${opt:eubfr_env, env:EUBFR_ENV, 'dev'}
+  serverless-offline:
+    port: 4000
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, env:EUBFR_STAGE, 'dev'}
+  region: ${opt:region, env:EUBFR_AWS_REGION, 'eu-central-1'}
+  deploymentBucket:
+    name: eubfr-${self:custom.eubfrEnvironment}-deploy
+  stackTags:
+    ENV: ${self:custom.eubfrEnvironment}
+
+functions:
+  es-response-geojson:
+    handler: src/api/index.handler
+    name: ${self:provider.stage}-${self:service}-es-response-geojson
+    timeout: 300
+    environment:
+      CACHE_DIR: "/tmp"
+      ES_PUBLIC_ENDPOINT: https://search-test-public-ip4o6f4o6ziykrbjm4kdpyosfu.eu-central-1.es.amazonaws.com
+      INDEX: test-projects
+      TYPE: project
+    events:
+      - http:
+          path: /{any+}
+          method: ANY
+          cors: true

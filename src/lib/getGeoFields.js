@@ -4,16 +4,20 @@ const getMapping = require("./getMapping");
 const reduceToGeoFields = require("./reduceToGeoFields");
 
 const getGeoFields = async () => {
-  const { INDEX: index, TYPE: type } = process.env;
+  const { INDEX: index, TYPE: type, CACHE_DIR: cacheDir } = process.env;
+
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir);
+  }
 
   let mapping = {};
   const geoFields = {};
 
   try {
-    mapping = require("./.cache/Mapping.json");
+    mapping = require(`${cacheDir}/Mapping.json`);
   } catch (e) {
     mapping = await getMapping({ index, type });
-    fs.writeFileSync("./.cache/Mapping.json", JSON.stringify(mapping));
+    fs.writeFileSync(`${cacheDir}/Mapping.json`, JSON.stringify(mapping));
   }
 
   const { properties } = mapping[index].mappings[type];

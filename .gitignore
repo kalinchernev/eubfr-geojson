@@ -1,3 +1,14 @@
+.cache
+.changelog
+.content
 .env
+.serverless
+.webpack
+
+config.json
+
+coverage
+build
+dist
 node_modules
-.cache/*.json
+*.log
