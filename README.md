@@ -18,7 +18,7 @@ $ yarn start
 
 Here are a few examples for starters.
 
-### Get projects
+### Get a few records
 
 ```sh
 $ curl --request POST \
@@ -28,6 +28,19 @@ $ curl --request POST \
 	"from" : 0, "size" : 6
 }
 '
+```
+
+### Get records from a specific producer
+
+```sh
+$ curl --request POST \
+  --url http://localhost:4000/test-projects/project/_search \
+  --header 'content-type: application/json' \
+  --data '{
+	"query": {
+		"wildcard" : { "computed_key" : "eac/*" }
+	}
+}'
 ```
 
 ## Deploy service
