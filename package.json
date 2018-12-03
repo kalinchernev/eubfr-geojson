@@ -1,0 +1,14 @@
+{
+  "name": "eubfr-geojson",
+  "version": "1.0.0",
+  "description": "Get results from Elasticsearch and format them as GeoJSON",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Kalin Chernev",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "6.1.0"
+  }
+}
