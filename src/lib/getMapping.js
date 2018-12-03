@@ -4,10 +4,11 @@ const getMapping = async ({ index, type }) => {
   const { ES_PUBLIC_ENDPOINT } = process.env;
 
   let mapping = {};
-  const endpoint = `${ES_PUBLIC_ENDPOINT}/${index}/_mapping/${type}`;
 
   try {
-    mapping = await request(endpoint, {
+    mapping = await request({
+      host: ES_PUBLIC_ENDPOINT,
+      path: `/${index}/_mapping/${type}`,
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",

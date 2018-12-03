@@ -32,7 +32,7 @@ functions:
     timeout: 300
     environment:
       CACHE_DIR: "/tmp"
-      ES_PUBLIC_ENDPOINT: https://search-test-public-ip4o6f4o6ziykrbjm4kdpyosfu.eu-central-1.es.amazonaws.com
+      ES_PUBLIC_ENDPOINT: search-test-public-ip4o6f4o6ziykrbjm4kdpyosfu.eu-central-1.es.amazonaws.com
       INDEX: test-projects
       TYPE: project
     events:
