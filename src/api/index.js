@@ -69,20 +69,23 @@ export const handler = async event => {
           const locations = record._source[field];
 
           locations.forEach(location => {
-            const { lon, lat } = location.centroid;
-            geojson.features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [lon, lat]
-              },
-              properties: {
-                id: record._id,
-                computed_key: record._source.computed_key,
-                last_modified: record._source.last_modified,
-                ...location
-              }
-            });
+            // This one is null if not present.
+            if (location.centroid) {
+              const { lon, lat } = location.centroid;
+              geojson.features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [lon, lat]
+                },
+                properties: {
+                  id: record._id,
+                  computed_key: record._source.computed_key,
+                  last_modified: record._source.last_modified,
+                  ...location
+                }
+              });
+            }
           });
         });
       });
