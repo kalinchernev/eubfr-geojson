@@ -62,7 +62,11 @@ export const handler = async event => {
       body
     );
 
-    if (elasticsearchRes.hits.hits.length) {
+    if (
+      elasticsearchRes.hits &&
+      elasticsearchRes.hits.hits &&
+      elasticsearchRes.hits.hits.length
+    ) {
       elasticsearchRes.hits.hits.forEach(record => {
         centroidFields.forEach(centroidField => {
           const field = centroidField.split(".")[0];
