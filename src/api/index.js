@@ -3,6 +3,9 @@ const getGeoFields = require("../lib/getGeoFields");
 const request = require("../lib/request");
 
 export const handler = async event => {
+  // Extract only what we need from proxy request.
+  const { path, httpMethod: method, body } = event;
+
   const {
     CACHE_DIR: cacheDir,
     ES_PUBLIC_ENDPOINT,
@@ -10,12 +13,17 @@ export const handler = async event => {
     TYPE: type
   } = process.env;
 
+  // Create cache directory.
   if (!fs.existsSync(cacheDir)) {
     fs.mkdirSync(cacheDir);
   }
 
   let geoFields = {};
-  let results = {};
+  const centroidFields = [];
+  const geojson = {
+    type: "FeatureCollection",
+    features: []
+  };
   // Response template.
   const response = {
     statusCode: 200,
@@ -33,7 +41,12 @@ export const handler = async event => {
     fs.writeFileSync(`${cacheDir}/GeoFields.json`, JSON.stringify(geoFields));
   }
 
-  const { path, httpMethod: method, body } = event;
+  // We support only fields with centroids (points) for the time being.
+  Object.keys(geoFields).forEach(geoField => {
+    if (geoField.includes("centroid")) {
+      centroidFields.push(geoField);
+    }
+  });
 
   try {
     const elasticsearchRes = await request(
@@ -43,30 +56,38 @@ export const handler = async event => {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json"
         },
-        path,
+        path: `/${index}/${type}${path}`,
         method
       },
       body
     );
 
     if (elasticsearchRes.hits.hits.length) {
-      results = elasticsearchRes.hits.hits.map(record => {
-        // Start with key fields usually needed.
-        const mapped = {
-          id: record._id,
-          computed_key: record._source.computed_key,
-          last_modified: record._source.last_modified
-        };
+      elasticsearchRes.hits.hits.forEach(record => {
+        centroidFields.forEach(centroidField => {
+          const field = centroidField.split(".")[0];
+          const locations = record._source[field];
 
-        // Add fields which contain geolocation information.
-        Object.keys(geoFields).forEach(geoField => {
-          const field = geoField.split(".")[0];
-          mapped[field] = record._source[field];
+          locations.forEach(location => {
+            const { lon, lat } = location.centroid;
+            geojson.features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [lon, lat]
+              },
+              properties: {
+                id: record._id,
+                computed_key: record._source.computed_key,
+                last_modified: record._source.last_modified,
+                ...location
+              }
+            });
+          });
         });
-
-        return mapped;
       });
-      response.body = JSON.stringify(results);
+
+      response.body = JSON.stringify(geojson);
     } else {
       response.body = JSON.stringify({
         message: "There were no useful results to return regarding your query."

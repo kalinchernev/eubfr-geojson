@@ -16,13 +16,15 @@ $ yarn start
 
 ## Examples
 
-Here are a few examples for starters.
+Here are a few examples for starters. Keep in mind that `index` and `type` are automatically detected and used from your environment variables, as described in the [notes](#development-notes)
+
+So, use `protocol://host/_search` instead of `protocol://host/index/type/_search`.
 
 ### Get a few records
 
 ```sh
 $ curl --request POST \
-  --url http://localhost:4000/test-projects/project/_search \
+  --url http://localhost:4000/_search \
   --header 'content-type: application/json' \
   --data '{
 	"from" : 0, "size" : 6
@@ -34,7 +36,7 @@ $ curl --request POST \
 
 ```sh
 $ curl --request POST \
-  --url http://localhost:4000/test-projects/project/_search \
+  --url http://localhost:4000/_search \
   --header 'content-type: application/json' \
   --data '{
 	"query": {
