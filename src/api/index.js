@@ -62,8 +62,6 @@ export const handler = async event => {
       body
     );
 
-    debugger;
-
     if (
       elasticsearchRes.hits &&
       elasticsearchRes.hits.hits &&
