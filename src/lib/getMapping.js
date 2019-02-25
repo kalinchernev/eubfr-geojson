@@ -1,13 +1,13 @@
 const request = require("./request");
 
 const getMapping = async ({ index, type }) => {
-  const { ES_PUBLIC_ENDPOINT } = process.env;
+  const { EUBFR_ES_ENDPOINT } = process.env;
 
   let mapping = {};
 
   try {
     mapping = await request({
-      host: ES_PUBLIC_ENDPOINT,
+      host: EUBFR_ES_ENDPOINT,
       path: `/${index}/_mapping/${type}`,
       method: "GET",
       headers: {

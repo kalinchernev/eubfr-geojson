@@ -8,9 +8,9 @@ export const handler = async event => {
 
   const {
     CACHE_DIR: cacheDir,
-    ES_PUBLIC_ENDPOINT,
-    INDEX: index,
-    TYPE: type
+    EUBFR_ES_ENDPOINT,
+    EUBFR_ES_INDEX: index,
+    EUBFR_ES_TYPE: type
   } = process.env;
 
   // Create cache directory.
@@ -51,7 +51,7 @@ export const handler = async event => {
   try {
     const elasticsearchRes = await request(
       {
-        host: ES_PUBLIC_ENDPOINT,
+        host: EUBFR_ES_ENDPOINT,
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json"
@@ -61,6 +61,8 @@ export const handler = async event => {
       },
       body
     );
+
+    debugger;
 
     if (
       elasticsearchRes.hits &&

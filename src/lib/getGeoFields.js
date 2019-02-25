@@ -4,7 +4,11 @@ const getMapping = require("./getMapping");
 const reduceToGeoFields = require("./reduceToGeoFields");
 
 const getGeoFields = async () => {
-  const { INDEX: index, TYPE: type, CACHE_DIR: cacheDir } = process.env;
+  const {
+    EUBFR_ES_INDEX: index,
+    EUBFR_ES_TYPE: type,
+    CACHE_DIR: cacheDir
+  } = process.env;
 
   if (!fs.existsSync(cacheDir)) {
     fs.mkdirSync(cacheDir);

@@ -32,9 +32,9 @@ functions:
     timeout: 300
     environment:
       CACHE_DIR: "/tmp"
-      ES_PUBLIC_ENDPOINT: search-test-public-ip4o6f4o6ziykrbjm4kdpyosfu.eu-central-1.es.amazonaws.com
-      INDEX: test-projects
-      TYPE: project
+      EUBFR_ES_ENDPOINT: ${env:EUBFR_ES_ENDPOINT}
+      EUBFR_ES_INDEX: ${env:EUBFR_ES_INDEX}
+      EUBFR_ES_TYPE: ${env:EUBFR_ES_TYPE}
     events:
       - http:
           path: /{any+}
