@@ -61,7 +61,7 @@ $ curl --request POST \
 
 Ensure your [credentials are setup correctly](https://serverless.com/framework/docs/providers/aws/guide/credentials/), then tweak the following if necessary:
 
-```
+```sh
 $ export EUBFR_ENV=
 $ export EUBFR_STAGE=
 $ export EUBFR_AWS_REGION=
