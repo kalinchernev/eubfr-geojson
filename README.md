@@ -89,7 +89,7 @@ environment:
 
 This proxy service exists with the sole purpose of formatting response documents from Elasticsearch as a GeoJSON.
 
-In order to achieve it's purpose, the service makes the following assumptions, which are also constraints for what it can achieve matching expectations:
+In order to achieve its purpose, the service makes the following assumptions, which are also constraints for what it can achieve matching expectations:
 
 - Resulting documents should contain geolocation information. More specifically, it has to be in a field called `project_locations`, with a property `centroid` which is of type [geo point](https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-point.html).
 - Resulting documents formatted by the service should be in the standard/default response structure of Elasticsearch, i.e. `response.hits.hits`. If aggregations are used, which changes the shape of the response, these structures are not formatted as GeoJSON.
